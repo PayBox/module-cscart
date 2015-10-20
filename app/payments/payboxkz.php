@@ -153,7 +153,7 @@ if (defined('PAYMENT_NOTIFICATION')) {
 	$form_fields['pg_sig'] = PG_Signature::make('payment.php', $form_fields, $processor_data['processor_params']['secret_key']);
 
 	fn_change_order_status($order_id, 'O');
-    fn_create_payment_form('http://paybox.kz/payment.php', $form_fields, 'PayBox pay', false);
+    fn_create_payment_form('https://paybox.kz/payment.php', $form_fields, 'payboxkz', false);
 }
 
 exit;
