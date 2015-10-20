@@ -1,7 +1,7 @@
 <?php
 
 use Tygh\Registry;
-require_once 'payboxkz\PG_Signature.php';
+require_once 'payboxkz/PG_Signature.php';
 
 if (!defined('BOOTSTRAP')) { die('Access denied'); }
 
