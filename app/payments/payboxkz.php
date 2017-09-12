@@ -111,8 +111,8 @@ if (defined('PAYMENT_NOTIFICATION')) {
 } else {
 	// Валюта по старому ISO
 	$order_info = fn_get_order_info($order_id);
-	if($order_info['secondary_currency'] == "RUB")
-		$order_info['secondary_currency'] = "RUR";
+	if($order_info['secondary_currency'] == "RUR")
+		$order_info['secondary_currency'] = "RUB";
 
 	$arrOrderItems = $order_info['products'];
 	foreach($arrOrderItems as $arrItem){
