@@ -16,16 +16,16 @@ if (defined('PAYMENT_NOTIFICATION')) {
 		'B'	=> 'Postponed',
 		'I' => 'Cancel',
 	);
-	
+
 	$arrPendingStatuses = array('N','P','O');
 	$arrOkStatuses = array('C');
 	$arrFailedStatuses = array('F');
-	
+
 	$order_id = (int) $_REQUEST['pg_order_id'];
 	$order_info = fn_get_order_info($order_id);
     $processor_data = $order_info['payment_method'];
 	$arrRequest = array();
-	if(!empty($_POST)) 
+	if(!empty($_POST))
 		$arrRequest = $_POST;
 	else
 		$arrRequest = $_GET;
@@ -33,17 +33,17 @@ if (defined('PAYMENT_NOTIFICATION')) {
 	$thisScriptName = PG_Signature::getOurScriptName();
 	if (empty($arrRequest['pg_sig']) || !PG_Signature::check($arrRequest['pg_sig'], $thisScriptName, $arrRequest, $processor_data['processor_params']['secret_key']))
 		die("Wrong signature");
-	
+
     if ($mode == 'check') {
 		$bCheckResult = 0;
 
 		if(empty($order_info) || !in_array($order_info['status'], $arrPendingStatuses))
-			$error_desc = "Товар не доступен. Либо заказа нет, либо его статус " . !empty($arrStatuses[$order_info['status']]) ? $arrStatuses[$order_info['status']] : $order_info['status'];	
+			$error_desc = "Товар не доступен. Либо заказа нет, либо его статус " . !empty($arrStatuses[$order_info['status']]) ? $arrStatuses[$order_info['status']] : $order_info['status'];
 		elseif($arrRequest['pg_amount'] != $order_info['total'])
 			$error_desc = "Неверная сумма";
 		else
 			$bCheckResult = 1;
-		
+
 		$arrResponse['pg_salt']              = $arrRequest['pg_salt']; // в ответе необходимо указывать тот же pg_salt, что и в запросе
 		$arrResponse['pg_status']            = $bCheckResult ? 'ok' : 'error';
 		$arrResponse['pg_error_description'] = $bCheckResult ?  ""  : $error_desc;
@@ -54,16 +54,16 @@ if (defined('PAYMENT_NOTIFICATION')) {
 		$objResponse->addChild('pg_status', $arrResponse['pg_status']);
 		$objResponse->addChild('pg_error_description', $arrResponse['pg_error_description']);
 		$objResponse->addChild('pg_sig', $arrResponse['pg_sig']);
-		
+
 		header("Content-type: text/xml");
 		echo $objResponse->asXML();
 		die();
-		
-    } 
+
+    }
 	elseif ($mode == 'result') {
         $bResult = 0;
 		if(empty($order_info) || !in_array($order_info['status'], array_merge($arrPendingStatuses, $arrOkStatuses, $arrFailedStatuses)))
-			$strResponseDescription = "Товар не доступен. Либо заказа нет, либо его статус " . !empty($arrStatuses[$order_info['status']]) ? $arrStatuses[$order_info['status']] : $order_info['status'];	
+			$strResponseDescription = "Товар не доступен. Либо заказа нет, либо его статус " . !empty($arrStatuses[$order_info['status']]) ? $arrStatuses[$order_info['status']] : $order_info['status'];
 		elseif($arrRequest['pg_amount'] != $order_info['total'])
 			$strResponseDescription = "Неверная сумма";
 		else {
@@ -98,12 +98,12 @@ if (defined('PAYMENT_NOTIFICATION')) {
 		$objResponse->addChild('pg_status', $strResponseStatus);
 		$objResponse->addChild('pg_description', $strResponseDescription);
 		$objResponse->addChild('pg_sig', PG_Signature::makeXML($thisScriptName, $objResponse, $processor_data['processor_params']['secret_key']));
-		
+
 		header("Content-type: text/xml");
 		echo $objResponse->asXML();
 		die();
-		
-    } 
+
+    }
 	elseif ($mode == 'success' || $mode == 'failed') {
 		fn_order_placement_routines('route', $order_id, false);
     }
@@ -142,7 +142,7 @@ if (defined('PAYMENT_NOTIFICATION')) {
 	$strMaybePhone = (!empty($order_info['b_phone'])) ? $order_info['b_phone'] : @$order_info['phone'];
 	preg_match_all("/\d/", $strMaybePhone, $array);
 	$strPhone = implode('',$array[0]);
-	$form_fields['pg_user_phone'] = $strPhone;	
+	$form_fields['pg_user_phone'] = $strPhone;
 
 	$strMaybeEmail = (!empty($order_info['email'])) ? $order_info['email'] : @$order_info['responsible_email'];
 	if(preg_match('/^.+@.+\..+$/', $strMaybeEmail)){
@@ -153,7 +153,7 @@ if (defined('PAYMENT_NOTIFICATION')) {
 	$form_fields['pg_sig'] = PG_Signature::make('payment.php', $form_fields, $processor_data['processor_params']['secret_key']);
 
 	fn_change_order_status($order_id, 'O');
-    fn_create_payment_form('https://paybox.kz/payment.php', $form_fields, 'payboxkz', false);
+    fn_create_payment_form('https://api.paybox.money/payment.php', $form_fields, 'payboxkz', false);
 }
 
 exit;
