@@ -38,7 +38,7 @@ if (defined('PAYMENT_NOTIFICATION')) {
 		$bCheckResult = 0;
 
 		if(empty($order_info) || !in_array($order_info['status'], $arrPendingStatuses))
-			$error_desc = "Товар не доступен. Либо заказа нет, либо его статус " . !empty($arrStatuses[$order_info['status']]) ? $arrStatuses[$order_info['status']] : $order_info['status'];
+			$error_desc = "Товар не доступен. Либо заказа нет, либо его статус " . (!empty($arrStatuses[$order_info['status']]) ? $arrStatuses[$order_info['status']] : $order_info['status']);
 		elseif($arrRequest['pg_amount'] != $order_info['total'])
 			$error_desc = "Неверная сумма";
 		else
