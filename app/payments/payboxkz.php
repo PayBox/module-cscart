@@ -113,7 +113,7 @@ if (defined('PAYMENT_NOTIFICATION')) {
 	$order_info = fn_get_order_info($order_id);
 	if($order_info['secondary_currency'] == "RUR")
 		$order_info['secondary_currency'] = "RUB";
-
+    $strDescription = '';
 	$arrOrderItems = $order_info['products'];
 	foreach($arrOrderItems as $arrItem){
 		$strDescription .= $arrItem['product'];
