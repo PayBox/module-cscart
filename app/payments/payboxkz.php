@@ -131,11 +131,11 @@ if (defined('PAYMENT_NOTIFICATION')) {
 		'pg_lifetime'		=> $processor_data['processor_params']['lifetime']*60, // в секундах
 		'pg_testing_mode'	=> ($processor_data['processor_params']['test_mode'] == 'test') ? 1 : 0,
 		'pg_description'	=> mb_substr($strDescription, 0, 255, "UTF-8"),
-		'pg_check_url'		=> 'http://'.$_SERVER['HTTP_HOST'].'/index.php?dispatch=payment_notification.check&payment=payboxkz',
-		'pg_result_url'		=> 'http://'.$_SERVER['HTTP_HOST'].'/index.php?dispatch=payment_notification.result&payment=payboxkz',
+		'pg_check_url'		=> 'https://'.$_SERVER['HTTP_HOST'].'/index.php?dispatch=payment_notification.check&payment=payboxkz',
+		'pg_result_url'		=> 'https://'.$_SERVER['HTTP_HOST'].'/index.php?dispatch=payment_notification.result&payment=payboxkz',
 		'pg_request_method'	=> 'GET',
-		'pg_success_url'	=> 'http://'.$_SERVER['HTTP_HOST'].'/index.php?dispatch=payment_notification.success&payment=payboxkz',
-		'pg_failure_url'	=> 'http://'.$_SERVER['HTTP_HOST'].'/index.php?dispatch=payment_notification.fail&payment=payboxkz',
+		'pg_success_url'	=> 'https://'.$_SERVER['HTTP_HOST'].'/index.php?dispatch=payment_notification.success&payment=payboxkz',
+		'pg_failure_url'	=> 'https://'.$_SERVER['HTTP_HOST'].'/index.php?dispatch=payment_notification.fail&payment=payboxkz',
 		'pg_salt'			=> rand(21,43433), // Параметры безопасности сообщения. Необходима генерация pg_salt и подписи сообщения.
 	);
 
